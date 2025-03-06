@@ -38,6 +38,36 @@ cities <- c("Charlotte", "Los Angeles", "Houston", "Indianapolis", "Jacksonville
 #> Call the function "read_weather" 
 #> Check by reading/glimpsing a single station's file
 
+# set the directory where the data are stored
+data_dir <- 'us-weather-history/'
+
+# define function for importing data
+read_weather <- function(station) {
+  
+  # initialize an empty tibble to store the data
+  station_data <- tibble()
+  
+  # read the data into the tibble
+  station_data <- read_csv(paste0(data_dir,station,'.csv'))
+  
+  # add a column for the station name and move it to the front of the tibble
+  station_data <- station_data %>%
+    mutate(station_name = station) %>%
+    relocate(station_name, .before = date)
+  
+  # convert date column to date
+  station_data <- station_data %>%
+    mutate(date = as.Date(date))
+  
+  # return the data file in tibble format
+  return(station_data)
+}
+
+# call read_weather to get one station's weather
+single_station_data <- read_weather(stations[1])
+
+# look at single station's file
+glimpse(single_station_data)
 
 
 # QUESTION 2
@@ -45,12 +75,16 @@ cities <- c("Charlotte", "Los Angeles", "Houston", "Indianapolis", "Jacksonville
 #> Note that because map_dfr() has been superseded, and map() does not automatically bind rows, you will need to do so in the code.
 #> Save the resulting dataset to "ds"
 
+# call read_weather using map and bind rows to put all data into one data frame
+ds <- bind_rows(map(stations, read_weather))
 
 
 # QUESTION 3
 #> Make a factor called "city" based on the station variable
 #> (station should be the level and city should be the label)
 #> Use fct_count to check that there are 365 days of data for each city 
+
+
 
 
 # QUESTION 4
