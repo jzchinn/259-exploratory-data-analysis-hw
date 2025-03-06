@@ -205,7 +205,12 @@ for (i in c(1:12)) {
 #> Finally, use plot_correlation to investigate correlations between the continuous variables only
 #> Check the documentation for plot_correlation for an easy way to do this
 
+# generate box plots for all numeric variables by city, then month
+plot_boxplot(ds, by = 'city')
+plot_boxplot(ds, by = 'month')
 
+# plot correlations
+plot_correlation(ds, type = 'continuous')
 
 
 # QUESTION 9
